@@ -19,7 +19,9 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+Route::middleware('auth')->group(function () {
+	Route::get('/tweets', [TweetsController::class, 'index'])->name('home');
+	Route::post('/tweets', [TweetsController::class, 'store']);
+});
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::post('/tweets', [TweetsController::class, 'store']);
 
