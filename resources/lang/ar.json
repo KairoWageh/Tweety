@@ -1,0 +1,11 @@
+{
+	"register": "تسجيل",
+	"login": "دخول",
+	"email": "البريد الإلكتروني",
+	"password": "كلمة المرور",
+	"remember_me": "تذكرني",
+	"forgot_your_password": "نسيت كلمة مرورك",
+	"username": "اسم المستخدم",
+	"name": "الاسم",
+	"confirm_password": "تأكيد كلمة المرور"
+}

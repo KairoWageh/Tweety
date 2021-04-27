@@ -6,10 +6,11 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Followable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, Followable;
 
     /**
      * The attributes that are mass assignable.
@@ -17,7 +18,10 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'username',
         'name',
+        'avatar',
+        'description',
         'email',
         'password',
     ];
@@ -41,29 +45,25 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function getAvatarAttribute(){
-        return "https://i.pravatar.cc/200?u=". $this->email;
+    public function getAvatarAttribute($value){
+        return asset($value ?: '/public/images/noimage.png');
     }
 
     public function timeline(){
         $friends = $this->follows()->pluck('id');
         return Tweet::whereIn('user_id', $friends)
-                ->orWhere('user_id', $this->id)->latest()->get();
+                ->orWhere('user_id', $this->id)->withLikes()->latest()->paginate(5);
     }
 
     public function tweets(){
-        return $this->hasMany(Tweet::class);
+        return $this->hasMany(Tweet::class)->latest();
     }
 
-    public function follow(User $user){
-        return $this->follows()->save($user);
+    public function path($append = ''){
+        $path = route('profile', $this->username);
+        return $append ? "{$path}/{$append}" : "$path";
     }
-
-    public function follows(){
-        return $this->belongsToMany(User::class, 'follows', 'user_id', 'following_user_id');
-    }
-
-    public function getRouteKeyName(){
-        return 'name';
-    }
+    // public function getRouteKeyName(){
+    //     return 'name';
+    // }
 }

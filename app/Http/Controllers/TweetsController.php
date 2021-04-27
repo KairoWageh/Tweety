@@ -3,10 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Tweet;
+use App\Repository\contracts\TweetsRepositoryInterface;
+
 
 class TweetsController extends Controller
 {
+    protected $tweetsRepository;
+
+    public function __construct(TweetsRepositoryInterface $tweetsRepository){
+        $this->tweetsRepository = $tweetsRepository;
+    }
 	/**
      * Show the application dashboard.
      *
@@ -18,14 +24,16 @@ class TweetsController extends Controller
             'tweets' => auth()->user()->timeline(),
         ]);
     }
-	
-    public function store(){
-    	$attributes = request()->validate(['body' => 'required|max:255']);
-    	Tweet::create([
-    		'user_id' => auth()->id(),
-    		'body' => $attributes['body'],
-    	]);
 
-    	return redirect()->back();
+    public function store(Request $request){
+        return $this->tweetsRepository->store($request);
+
+//    	$attributes = request()->validate(['body' => 'required|max:255']);
+//    	Tweet::create([
+//    		'user_id' => auth()->id(),
+//    		'body' => $attributes['body'],
+//    	]);
+//
+//    	return redirect()->back();
     }
 }
