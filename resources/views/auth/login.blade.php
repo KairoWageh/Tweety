@@ -17,7 +17,7 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
-                        
+
                     </div>
 
                     <div class="mb-6">

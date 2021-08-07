@@ -25,15 +25,21 @@ class TweetsController extends Controller
         ]);
     }
 
+    /**
+     * stores the new tweet
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(Request $request){
         return $this->tweetsRepository->store($request);
+    }
 
-//    	$attributes = request()->validate(['body' => 'required|max:255']);
-//    	Tweet::create([
-//    		'user_id' => auth()->id(),
-//    		'body' => $attributes['body'],
-//    	]);
-//
-//    	return redirect()->back();
+    /**
+     * destroys a specific tweet
+     * @param $tweet_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy($tweet_id){
+        return $this->tweetsRepository->destroy($tweet_id);
     }
 }

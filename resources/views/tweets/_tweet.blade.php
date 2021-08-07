@@ -9,6 +9,13 @@
             <a href="{{ route('profile', $tweet->user) }}">     {{$tweet->user->name}}
             </a>
         </h5>
+        @if($tweet->user->name == current_user()->name)
+            <form method="POST" action="{{route('delete_tweet', $tweet->id)}}">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="text-xs text-gray-500">{{ __('delete')}}</button>
+            </form>
+        @endif
         <p class="text-sm mb-3">
             {{$tweet->body}}
         </p>

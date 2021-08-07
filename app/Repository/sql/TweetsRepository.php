@@ -9,6 +9,11 @@ use App\Models\Tweet;
 
 class TweetsRepository extends BaseRepository implements TweetsRepositoryInterface
 {
+    /**
+     * stores a new tweet
+     * @param $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store($request){
         $tweeetsRequest = new TweetsRequest();
         $input = $request->all();
@@ -46,7 +51,16 @@ class TweetsRepository extends BaseRepository implements TweetsRepositoryInterfa
             ] ;
         }
         return response()->json($data);
+    }
 
-    	//return redirect()->back();
+    /**
+     * deletes a specific tweet
+     * @param $tweet_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy($tweet_id){
+        $tweet_to_delete = Tweet::find($tweet_id);
+        $tweet_to_delete->delete();
+        return back();
     }
 }
